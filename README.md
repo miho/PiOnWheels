@@ -1,6 +1,10 @@
 PiOnWheels
 ==========
 
+![](/resources/img/pow-01.png)
+
+![](/resources/img/pow-02.png)
+
 ## How to Build PoW
 
 ### Requirements
