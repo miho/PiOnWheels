@@ -1,0 +1,76 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+// 
+// // Note: "common.gradle" in the root project contains additional initialization
+//   for this project. This initialization is applied in the "build.gradle"
+//   of the root project.
+
+// NetBeans will automatically add "run" and "debug" tasks relying on the
+// "mainClass" property. You may however define the property prior executing
+// tasks by passing a "-PmainClass=<QUALIFIED_CLASS_NAME>" argument.
+//
+// Note however, that you may define your own "run" and "debug" task if you
+// prefer. In this case NetBeans will not add these tasks but you may rely on
+// your own implementation.
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'eu.mihosoft.pow.lab.Main'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    // TODO: Add dependencies here
+    //   but note that JUnit should have already been added in parent.gradle.
+    //   By default, only the Maven Central Repository is specified in
+    //   parent.gradle.
+    //
+    // You can read more about how to add dependency here:
+    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    
+    compile group: 'eu.mihosoft.vrl', name: 'vrl-ui', version: '0.5.0-SNAPSHOT'
+    compile group: 'eu.mihosoft.vrl', name: 'vrl-lang', version: '0.5.0-SNAPSHOT'
+    
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.4.1'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.4.1', classifier: 'sources'
+    
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.6'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.6', classifier: 'sources'
+    
+    compile 'commons-io:commons-io:2.4'
+    
+    compile fileTree (dir: 'libs/', includes: ['*.jar'])
+    compile fileTree (dir: 'libs/xbee', includes: ['*.jar'])
+    
+    compile project(':pow-common')
+    compile project(':pow-client')
+    
+    
+}
+
+
+// create a fat-jar (class files plus dependencies
+// excludes VRL.jar (plugin jar files must not start with 'vrl-\\d+')
+jar {
+
+    // dependencies except VRL
+    from configurations.runtime.asFileTree.
+        //        filter({file->return !file.name.startsWith("vrl-0")}).
+    files.collect { zipTree(it) }
+
+    // project class files compiled from source
+    from files(sourceSets.main.output.classesDir)
+    
+    manifest { attributes 'Main-Class': mainClass }
+}
+
+task run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = mainClass;
+    //    jvmArgs = ['-Dprism.forceGPU=true', '-Dprism.verbose=true']
+    jvmArgs = ['-Dprism.forceGPU=true']
+}

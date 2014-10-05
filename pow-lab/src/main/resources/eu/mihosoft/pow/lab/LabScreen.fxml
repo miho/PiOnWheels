@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane fx:id="rootView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="690.0" prefWidth="977.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.mihosoft.pow.lab.LabScreenController">
+  <tabs>
+    <Tab text="Connect">
+         <content>
+            <StackPane fx:id="connectionContainer" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to top, rgb(50,50,50), rgb(110,110,120));" />
+         </content>
+    </Tab>
+    <Tab text="Interact">
+         <content>
+            <StackPane fx:id="interactionContainer" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to top, rgb(50,50,50), rgb(110,110,120));" />
+         </content>
+    </Tab>
+      <Tab text="Design">
+         <content>
+            <StackPane fx:id="designContainer" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to top, rgb(50,50,50), rgb(110,110,120));" />
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

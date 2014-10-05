@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="429.0" prefWidth="510.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.mihosoft.pow.lab.InteractionScreenController">
+<children><MenuBar>
+  <menus>
+    <Menu mnemonicParsing="false" text="File">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#onLoadFile" text="Load" /><MenuItem mnemonicParsing="false" onAction="#onSaveFile" text="Save" />
+      </items>
+    </Menu><Menu mnemonicParsing="false" text="Compile &amp; Run">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#onRun" text="Run" /><MenuItem mnemonicParsing="false" onAction="#onResetBotPosition" text="Reset Bot Position" />
+  </items>
+</Menu><Menu mnemonicParsing="false" text="Samples">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#onSample1" text="Sample 1" /><MenuItem mnemonicParsing="false" onAction="#onSample2" text="Sample 2" />
+  </items>
+</Menu>
+  </menus>
+</MenuBar>
+      <SplitPane dividerPositions="0.5058548009367682" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+        <items>
+            <StackPane fx:id="statusContainer" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to top, rgb(50,50,50), rgb(110,110,120));" />
+            <StackPane fx:id="interactionContainer" prefHeight="150.0" prefWidth="200.0" />
+        </items>
+      </SplitPane>
+</children>
+</VBox>

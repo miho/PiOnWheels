@@ -1,0 +1,17 @@
+
+
+.radar {
+    -radar-color         : #00f300;
+    -background-color   : black;
+    -fx-background-color: black;
+}
+
+.radar .background {
+    -fx-background-color: -background-color;
+}
+
+.radar .line {
+    -fx-fill  : transparent;
+    -fx-stroke: -radar-color;
+    -fx-effect: dropshadow(gaussian, -radar-color, 5, 0.5, 0, 0);
+}
