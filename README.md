@@ -5,6 +5,8 @@ PiOnWheels
 
 ![](/resources/img/pow-02.png)
 
+Make sure to clone the slides as well: https://github.com/miho/JavaOne-2014
+
 ## How to Build PoW
 
 ### Requirements
@@ -15,7 +17,7 @@ PiOnWheels
 
 ### IDE
 
-Open the `PoW` [Gradle](http://www.gradle.org/) project in your favourite IDE (tested with NetBeans 7.4) and build it
+Open the `PoW` [Gradle](http://www.gradle.org/) project in your favourite IDE (tested with NetBeans 8.0) and build it
 by calling the `assemble` task.
 
 ### Command Line
