@@ -4,7 +4,6 @@ import eu.hansolo.fx.Poi;
 import eu.mihosoft.pow.client.Client;
 import eu.mihosoft.pow.net.api.IPScanner;
 import eu.mihosoft.pow.net.api.POWRemoteAPI;
-import eu.mihosoft.vrl.fxscad.JFXScad;
 import eu.mihosoft.vrl.fxscad.RedirectableStream;
 import eu.mihosoft.vrl.v3d.Transform;
 import eu.mihosoft.vrl.v3d.Vector3d;
@@ -144,7 +143,7 @@ public class Main extends Application {
                             log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (threads.isEmpty()) {
                 try {
                     Thread.sleep(duration);
@@ -197,7 +196,7 @@ public class Main extends Application {
                             log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (threads.isEmpty()) {
                 try {
                     Thread.sleep(duration);
@@ -521,34 +520,48 @@ public class Main extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        try {
         launch(args);
+        } catch(Throwable tr) {
+             Logger.getLogger(Main.class.getName()).
+                    log(Level.SEVERE, null, tr);
+        }
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("LabScreen.fxml"));
+        FXMLLoader loader = null;
 
         try {
+            loader = new FXMLLoader(
+                    getClass().getResource("LabScreen.fxml"));
+
             loader.load();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).
+                    log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        try {
+
+            LabScreenController controller = loader.getController();
+
+            Scene scene = new Scene(controller.getRootView());
+
+            primaryStage.setScene(scene);
+            primaryStage.setMinWidth(1024);
+            primaryStage.setMinHeight(768);
+            primaryStage.setWidth(1024);
+            primaryStage.setHeight(768);
+            primaryStage.show();
+
+            tryConnect(controller.getConnectionController());
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
-
-        LabScreenController controller = loader.getController();
-
-        Scene scene = new Scene(controller.getRootView());
-
-        primaryStage.setScene(scene);
-        primaryStage.setMinWidth(1024);
-        primaryStage.setMinHeight(768);
-        primaryStage.setWidth(1024);
-        primaryStage.setHeight(768);
-        primaryStage.show();
-
-        tryConnect(controller.getConnectionController());
     }
 
     @Override
@@ -557,9 +570,8 @@ public class Main extends Application {
     }
 
     private void tryConnect(ConnectionController controller) {
-        
-//        if (true)return;
 
+//        if (true)return;
         Client client = new Client();
 
         if (iPScannerThread != null) {
