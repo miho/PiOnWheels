@@ -533,7 +533,7 @@ public class Main extends Application {
         try {
             loader.load();
         } catch (IOException ex) {
-            Logger.getLogger(eu.mihosoft.vrl.workflow.demo.Main.class.getName()).
+            Logger.getLogger(Main.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
 
