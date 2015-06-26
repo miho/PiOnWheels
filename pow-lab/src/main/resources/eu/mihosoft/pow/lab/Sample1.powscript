@@ -1,0 +1,8 @@
+// use api object
+api.moveForward(3000)
+api.turnLeft(90)
+api.moveForward(3000)
+api.turnLeft(90)
+api.moveForward(3000)
+api.turnLeft(90)
+api.moveForward(3000)
