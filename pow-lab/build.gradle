@@ -31,9 +31,9 @@ dependencies {
     //
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
-    
-    compile group: 'eu.mihosoft.vrl', name: 'vrl-ui', version: '0.5.0-SNAPSHOT'
-    compile group: 'eu.mihosoft.vrl', name: 'vrl-lang', version: '0.5.0-SNAPSHOT'
+
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.3.7'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.3.7', classifier: 'sources'
     
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.4.1'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.4.1', classifier: 'sources'
