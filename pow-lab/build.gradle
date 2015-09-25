@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply from: 'libs/gradle/javafx.plugin'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -49,28 +50,61 @@ dependencies {
     compile project(':pow-common')
     compile project(':pow-client')
     
-    
 }
 
 
 // create a fat-jar (class files plus dependencies
 // excludes VRL.jar (plugin jar files must not start with 'vrl-\\d+')
-jar {
+//jar {
+//
+//    // dependencies except VRL
+//    from configurations.runtime.asFileTree.
+//        //        filter({file->return !file.name.startsWith("vrl-0")}).
+//    files.collect { zipTree(it) }
+//
+//    // project class files compiled from source
+//    from files(sourceSets.main.output.classesDir)
+//    
+//    manifest { attributes 'Main-Class': mainClass }
+//}
+//
+//task run(type: JavaExec) {
+//    classpath = sourceSets.main.runtimeClasspath
+//    main = mainClass;
+//    //    jvmArgs = ['-Dprism.forceGPU=true', '-Dprism.verbose=true']
+//    jvmArgs = ['-Dprism.forceGPU=true']
+//}
 
-    // dependencies except VRL
-    from configurations.runtime.asFileTree.
-        //        filter({file->return !file.name.startsWith("vrl-0")}).
-    files.collect { zipTree(it) }
-
-    // project class files compiled from source
-    from files(sourceSets.main.output.classesDir)
+javafx {
+    appID 'eu.mihosoft.pow-lab'
+    appName 'POW-Lab'
+    mainClass project.mainClass
     
-    manifest { attributes 'Main-Class': mainClass }
+    // deploy/info attributes
+    category = 'POW-Lab'
+    copyright = 'Copyright (c) 2015 Michel Hoffer (info@michaelhoffer.de)'
+    description = 'POW-Lab'
+    licenseType = 'Open Source'
+    vendor = 'Michael Hoffer'
+    installSystemWide = false
+    menu = true
+    shortcut = true
+    
+//    // app icons
+//    icons {
+//        shortcut = ['shortcut-16.png', 'shortcut-32.png', 'shortcut-128.png', 'shortcut-256.png', 'shortcut-16@2x.png', 'shortcut-32@2x.png', 'shortcut-128@2x.png']
+//        volume = 'javafx-icon.png'
+//        setup = 'javafx-icon.png'
+//    }
+
+//    icons {
+//        shortcut = ['event-handler-icon-01.png']
+//    }
 }
 
-task run(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = mainClass;
-    //    jvmArgs = ['-Dprism.forceGPU=true', '-Dprism.verbose=true']
-    jvmArgs = ['-Dprism.forceGPU=true']
-}
+ jfxDeploy {
+//    packaging = "installer"
+    packaging = "image"
+    verbose = true
+ }
+

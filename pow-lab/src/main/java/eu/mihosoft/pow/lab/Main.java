@@ -532,7 +532,8 @@ public class Main extends Application {
 
         try {
             loader.load();
-        } catch (IOException ex) {
+        } catch (Throwable ex) {
+            ex.printStackTrace(System.out);
             Logger.getLogger(Main.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
