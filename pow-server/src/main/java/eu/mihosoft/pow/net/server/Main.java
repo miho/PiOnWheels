@@ -2,6 +2,7 @@ package eu.mihosoft.pow.net.server;
 
 import eu.mihosoft.pow.net.server.api.POWServerAPI;
 import eu.mihosoft.pow.net.api.POWRemoteAPI;
+import eu.mihosoft.pow.net.io.pixycam.Pixy;
 import java.io.IOException;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
@@ -22,7 +23,14 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        
+        Pixy pixy = new Pixy();
+        
+        System.out.println("---");
+        
         init();
+        
         try {
             server();
         } catch (IOException ex) {
