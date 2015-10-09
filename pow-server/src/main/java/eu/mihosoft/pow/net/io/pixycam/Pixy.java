@@ -37,7 +37,7 @@ public class Pixy {
         if (!isPixyRunning()) {
 
             java.util.logging.Logger.getLogger(Pixy.class.getName()).
-                    log(java.util.logging.Level.INFO, "pow_pixy not running");
+                    log(java.util.logging.Level.INFO, "pow-pixy not running");
 
         } else {
 
@@ -45,11 +45,11 @@ public class Pixy {
             try {
 
                 java.util.logging.Logger.getLogger(Pixy.class.getName()).
-                        log(java.util.logging.Level.INFO, "shutting down previous pow_pixy");
+                        log(java.util.logging.Level.INFO, "shutting down previous pow-pixy");
 
                 String msg = "";
 
-                Process pr = rt.exec("sudo killall pow_pixy");
+                Process pr = rt.exec("sudo killall pow-pixy");
 
                 pr.waitFor();
 
@@ -76,15 +76,15 @@ public class Pixy {
 
         try {
             URL inputUrl = getClass().
-                    getResource("/eu/mihosoft/pow/net/io/pow_pixy");
-            File dest = new File("/tmp/pow_pixy");
+                    getResource("/eu/mihosoft/pow/net/io/pixycam/pow-pixy");
+            File dest = new File("/tmp/pow-pixy");
             FileUtils.copyURLToFile(inputUrl, dest);
         } catch (Exception ex) {
             // we don't care if file already exists
         }
 
-        execute("sudo chmod +x /tmp/pow_pixy", true);
-        execute("sudo /tmp/pow_pixy", false);
+        execute("sudo chmod +x /tmp/pow-pixy", true);
+        execute("sudo /tmp/pow-pixy", false);
 
         System.out.println("isRunning: " + isPixyRunning());
     }
@@ -148,7 +148,7 @@ public class Pixy {
                 msg += line + "\n";
             }
 
-            return msg.contains("pow_pixy");
+            return msg.contains("pow-pixy");
 
         } catch (InterruptedException | IOException ex) {
             java.util.logging.Logger.getLogger(Pixy.class.getName()).
