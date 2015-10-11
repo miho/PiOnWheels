@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.mihosoft.pow.net.io.pixycam;
+package eu.mihosoft.pow.net.api.pixycam;
 
 /**
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-public final class Blob {
-    private int id;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+final class BlobImpl implements Blob{
+    private final int id;
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
 
-    public Blob(int id, int x, int y, int width, int height) {
+    public BlobImpl(int id, int x, int y, int width, int height) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -27,6 +27,7 @@ public final class Blob {
     /**
      * @return the id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -34,6 +35,7 @@ public final class Blob {
     /**
      * @return the x
      */
+    @Override
     public int getX() {
         return x;
     }
@@ -41,6 +43,7 @@ public final class Blob {
     /**
      * @return the y
      */
+    @Override
     public int getY() {
         return y;
     }
@@ -48,6 +51,7 @@ public final class Blob {
     /**
      * @return the width
      */
+    @Override
     public int getWidth() {
         return width;
     }
@@ -55,6 +59,7 @@ public final class Blob {
     /**
      * @return the height
      */
+    @Override
     public int getHeight() {
         return height;
     }

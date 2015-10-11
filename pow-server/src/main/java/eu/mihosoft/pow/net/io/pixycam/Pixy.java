@@ -5,9 +5,11 @@
  */
 package eu.mihosoft.pow.net.io.pixycam;
 
+import eu.mihosoft.pow.net.api.pixycam.Blob;
+import eu.mihosoft.pow.net.api.pixycam.Frame;
+import eu.mihosoft.pow.net.api.pixycam.FrameImpl;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -15,9 +17,11 @@ import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author miho
+ * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
 public class Pixy {
+
+    private Frame frame;
 
     public Pixy() {
         init();
@@ -45,7 +49,8 @@ public class Pixy {
             try {
 
                 java.util.logging.Logger.getLogger(Pixy.class.getName()).
-                        log(java.util.logging.Level.INFO, "shutting down previous pow-pixy");
+                        log(java.util.logging.Level.INFO,
+                                "shutting down previous pow-pixy");
 
                 String msg = "";
 
@@ -70,7 +75,7 @@ public class Pixy {
         }
     }
 
-    private void startPixy() {
+    public void startPixy() {
 
         String msg = "";
 
@@ -84,9 +89,78 @@ public class Pixy {
         }
 
         execute("sudo chmod +x /tmp/pow-pixy", true);
-        execute("sudo /tmp/pow-pixy", false);
+        executeThread("sudo /tmp/pow-pixy");
 
         System.out.println("isRunning: " + isPixyRunning());
+    }
+
+    private void executeThread(String cmd) {
+
+        stopPixy();
+
+        Runnable r = () -> {
+
+            try {
+                String msg = "";
+
+                Runtime rt = Runtime.getRuntime();
+
+                Process pr = rt.exec(cmd);
+
+                BufferedReader sout = new BufferedReader(
+                        new InputStreamReader(pr.getInputStream()));
+                BufferedReader err = new BufferedReader(
+                        new InputStreamReader(pr.getInputStream()));
+
+                String line = null;
+
+                while ((line = sout.readLine()) != null) {
+                    msg += line + "\n";
+
+                    String trimmedLine = line.trim();
+
+                    try {
+
+                        if (trimmedLine.startsWith("frame")) {
+                            String numberString = trimmedLine.split(":")[1].trim();
+                            synchronized (this) {
+                                frame = Frame.newInstance(
+                                        Integer.parseInt(numberString));
+                            }
+                        } else if (trimmedLine.startsWith("sig")) {
+                            String[] entries = trimmedLine.split(";");
+                            int id = Integer.parseInt(entries[0].split(":")[1].trim());
+                            int x = Integer.parseInt(entries[1].split(":")[1].trim());
+                            int y = Integer.parseInt(entries[2].split(":")[1].trim());
+                            int w = Integer.parseInt(entries[3].split(":")[1].trim());
+                            int h = Integer.parseInt(entries[4].split(":")[1].trim());
+
+                            synchronized (this) {
+                                ((FrameImpl) frame).
+                                        addBlob(Blob.newInstance(id, x, y, w, h));
+                            }
+                        }
+                    } catch (Exception ex) {
+                        System.err.println(
+                                ">> ERROR while parsing line: " + line);
+                        ex.printStackTrace(System.err);
+                    }
+                } // end while readLine()
+
+                while ((line = err.readLine()) != null) {
+                    msg += line + "\n";
+
+                    System.err.println(">> " + line);
+                }
+            } catch (IOException ex) {
+                java.util.logging.Logger.
+                        getLogger(Pixy.class.getName()).
+                        log(java.util.logging.Level.SEVERE, null, ex);
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
     }
 
     private void execute(String cmd, boolean waitFor) {
@@ -121,9 +195,11 @@ public class Pixy {
                 System.out.println(">> " + line);
             }
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(Pixy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pixy.class.getName()).
+                    log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(Pixy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pixy.class.getName()).
+                    log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
 
@@ -156,5 +232,22 @@ public class Pixy {
 
             return false;
         }
+    }
+
+    /**
+     * @return the frame
+     */
+    public Frame getFrame() {
+        Frame result;
+
+        synchronized (this) {
+            result = Frame.copy(frame);
+        }
+
+        return result;
+    }
+
+    public boolean isCamConnected() {
+        throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
     }
 }

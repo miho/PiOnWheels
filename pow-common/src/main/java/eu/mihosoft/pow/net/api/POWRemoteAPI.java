@@ -7,6 +7,7 @@
 package eu.mihosoft.pow.net.api;
 
 import eu.hansolo.fx.Poi;
+import eu.mihosoft.pow.net.api.pixycam.Frame;
 
 /**
  *
@@ -35,4 +36,9 @@ public interface POWRemoteAPI {
     
     boolean setFullTurnLeftDuration(int duration);
     boolean setFullTurnRightDuration(int duration);
+    
+    boolean hasPixyCam();
+    byte[] getPixyFrameInfo();
+    boolean startPixyCam();
+    boolean stopPixyCam();
 }

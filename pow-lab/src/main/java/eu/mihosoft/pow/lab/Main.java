@@ -2,14 +2,14 @@ package eu.mihosoft.pow.lab;
 
 import eu.hansolo.fx.Poi;
 import eu.mihosoft.pow.client.Client;
+import eu.mihosoft.pow.net.api.GroupAPI;
 import eu.mihosoft.pow.net.api.IPScanner;
 import eu.mihosoft.pow.net.api.POWRemoteAPI;
-import eu.mihosoft.vrl.fxscad.JFXScad;
 import eu.mihosoft.vrl.fxscad.RedirectableStream;
 import eu.mihosoft.vrl.v3d.Transform;
 import eu.mihosoft.vrl.v3d.Vector3d;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class Main extends Application {
     private static final POWRemoteGroupAPI groupAPI = new POWRemoteGroupAPI();
 
     // TODO remove code repetition
-    static class POWRemoteGroupAPI implements POWRemoteAPI {
+    static class POWRemoteGroupAPI implements GroupAPI {
 
         private Poi poi = new Poi("Pow-Bot");
         private Vector3d pos = new Vector3d(0, 0);
@@ -144,7 +144,7 @@ public class Main extends Application {
                             log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (threads.isEmpty()) {
                 try {
                     Thread.sleep(duration);
@@ -197,7 +197,7 @@ public class Main extends Application {
                             log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (threads.isEmpty()) {
                 try {
                     Thread.sleep(duration);
@@ -515,6 +515,32 @@ public class Main extends Application {
             return true;
         }
 
+        @Override
+        public boolean hasPixyCam() {
+            throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
+        }
+
+        @Override
+        public byte[] getPixyFrameInfo() {
+            throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
+        }
+
+        @Override
+        public boolean startPixyCam() {
+            throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
+        }
+
+        @Override
+        public boolean stopPixyCam() {
+            throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
+        }
+
+        @Override
+        public Collection<POWRemoteAPI> getDevices() {
+            List<POWRemoteAPI> result = new ArrayList<>(devices.values());
+            return result;
+        }
+
     }
 
     /**
@@ -558,9 +584,8 @@ public class Main extends Application {
     }
 
     private void tryConnect(ConnectionController controller) {
-        
-//        if (true)return;
 
+//        if (true)return;
         Client client = new Client();
 
         if (iPScannerThread != null) {
@@ -606,7 +631,7 @@ public class Main extends Application {
 
     }
 
-    public static POWRemoteAPI getPOWRemoteAPI() {
+    public static GroupAPI getPOWRemoteAPI() {
         return groupAPI;
     }
 

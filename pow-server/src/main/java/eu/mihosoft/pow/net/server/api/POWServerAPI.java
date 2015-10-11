@@ -6,8 +6,10 @@
 package eu.mihosoft.pow.net.server.api;
 
 import eu.mihosoft.pow.net.api.POWRemoteAPI;
+import eu.mihosoft.pow.net.api.pixycam.Frame;
 import eu.mihosoft.pow.net.io.LED;
 import eu.mihosoft.pow.net.io.Servo;
+import eu.mihosoft.pow.net.io.pixycam.Pixy;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +25,7 @@ public class POWServerAPI implements POWRemoteAPI {
     private static final Servo leftServo = new Servo(4);
     private static final Servo rightServo = new Servo(17);
     private static final LED statusLED = new LED(25);
+    private static final Pixy pixyCam = new Pixy();
 
     private int fullTurnRight = 2730;
     private int fullTurnLeft = 2500;
@@ -221,6 +224,31 @@ public class POWServerAPI implements POWRemoteAPI {
     @Override
     public boolean setFullTurnRightDuration(int duration) {
         this.fullTurnRight = duration;
+
+        return true;
+    }
+
+    @Override
+    public boolean hasPixyCam() {
+
+        return pixyCam.isCamConnected();
+    }
+
+    @Override
+    public byte[] getPixyFrameInfo() {
+        return Frame.toByteArray(pixyCam.getFrame());
+    }
+
+    @Override
+    public boolean startPixyCam() {
+        pixyCam.startPixy();
+
+        return true;
+    }
+
+    @Override
+    public boolean stopPixyCam() {
+        Pixy.stopPixy();
 
         return true;
     }

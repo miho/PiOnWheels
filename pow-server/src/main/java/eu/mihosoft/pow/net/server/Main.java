@@ -24,11 +24,6 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        
-        Pixy pixy = new Pixy();
-        
-        System.out.println("---");
-        
         init();
         
         try {

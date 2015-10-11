@@ -222,7 +222,8 @@ public class InteractionScreenController implements Initializable {
             cc.addCompilationCustomizers(
                     new ImportCustomizer().
                     addStarImports("eu.mihosoft.pow.client",
-                            "eu.mihosoft.pow.net.api"));
+                            "eu.mihosoft.pow.net.api",
+                            "eu.mihosoft.pow.lab"));
 
             GroovyShell shell = new GroovyShell(getClass().getClassLoader(),
                     new Binding(), cc);
