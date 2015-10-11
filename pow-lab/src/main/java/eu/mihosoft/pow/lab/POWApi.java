@@ -5,7 +5,6 @@
  */
 package eu.mihosoft.pow.lab;
 
-import eu.mihosoft.pow.io.BinaryInputStream;
 import eu.mihosoft.pow.net.api.POWRemoteAPI;
 import eu.mihosoft.pow.net.api.pixycam.Frame;
 
@@ -18,6 +17,18 @@ public interface POWApi {
     public static POWApi newApi(POWRemoteAPI api) {
         return new POWApiImpl(api);
     }
+
+    public static POWApi newApi() {
+        if (Main.getPOWRemoteAPI().getDevices().isEmpty()) {
+            return null;
+        }
+        return new POWApiImpl(Main.getPOWRemoteAPI().
+                getDevices().iterator().next());
+    }
+
+    public void move(Direction d);
+
+    public void move(Direction d, int duration);
 
     public void moveForward();
 
@@ -52,6 +63,8 @@ public interface POWApi {
     void startPixyCam();
 
     void stopPixyCam();
+
+    boolean hasPixyCamDetected(int id);
 }
 
 class POWApiImpl implements POWApi {
@@ -137,7 +150,7 @@ class POWApiImpl implements POWApi {
 
     @Override
     public Frame getPixyFrame() {
-        
+
         return Frame.fromByteArray(remoteApi.getPixyFrameInfo());
     }
 
@@ -149,6 +162,51 @@ class POWApiImpl implements POWApi {
     @Override
     public void stopPixyCam() {
         remoteApi.stopPixyCam();
+    }
+
+    @Override
+    public boolean hasPixyCamDetected(int id) {
+        return getPixyFrame().hasDetected(id);
+    }
+
+    @Override
+    public void move(Direction d) {
+        switch (d) {
+            case FORWARD:
+                moveForward(defaultMoveDuration);
+                break;
+            case BACKWARD:
+                moveBackward(defaultMoveDuration);
+                break;
+            case LEFT:
+                turnLeft(defaultTurnDuration);
+                break;
+            case RIGHT:
+                turnRight(defaultTurnDuration);
+                break;
+            default:
+            //
+        }
+    }
+
+    @Override
+    public void move(Direction d, int duration) {
+        switch (d) {
+            case FORWARD:
+                moveForward(duration);
+                break;
+            case BACKWARD:
+                moveBackward(duration);
+                break;
+            case LEFT:
+                turnLeft(duration);
+                break;
+            case RIGHT:
+                turnRight(duration);
+                break;
+            default:
+            //
+        }
     }
 
 }

@@ -41,7 +41,9 @@ public interface Frame {
                     blobsOffset + i * Blob.getBlobSize()));
         }
 
-        return new FrameImpl(id, blobs);
+        Frame f = new FrameImpl(id, blobs);
+        
+        return f;
     }
 
     public static int getFrameSize() {

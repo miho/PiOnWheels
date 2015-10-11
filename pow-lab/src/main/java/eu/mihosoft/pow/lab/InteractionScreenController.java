@@ -228,7 +228,8 @@ public class InteractionScreenController implements Initializable {
             GroovyShell shell = new GroovyShell(getClass().getClassLoader(),
                     new Binding(), cc);
 
-            shell.setProperty("api", Main.getPOWRemoteAPI());
+            shell.setProperty("advancedApi", Main.getPOWRemoteAPI());
+            shell.setProperty("api", POWApi.newApi());
 
             Script script = shell.parse(code);
 

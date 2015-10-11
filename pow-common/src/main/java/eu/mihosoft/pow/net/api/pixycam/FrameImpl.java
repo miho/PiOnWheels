@@ -59,4 +59,15 @@ public class FrameImpl implements Frame {
         return getBlobs().stream().filter((b -> b.getId() == id)).count() > 0;
     }
 
+    @Override
+    public String toString() {
+        String result = "[ number: " + number
+                + "\n> #blobs: " + blobs.size() + "\n";
+        for (Blob b : getBlobs()) {
+            result += "  -> " + b.toString() + "\n";
+        }
+        result += "\n]";
+        return result;
+    }
+
 }

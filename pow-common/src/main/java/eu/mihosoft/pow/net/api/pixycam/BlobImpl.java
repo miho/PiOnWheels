@@ -9,7 +9,8 @@ package eu.mihosoft.pow.net.api.pixycam;
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-final class BlobImpl implements Blob{
+final class BlobImpl implements Blob {
+
     private final int id;
     private final int x;
     private final int y;
@@ -63,6 +64,12 @@ final class BlobImpl implements Blob{
     public int getHeight() {
         return height;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "[id: " + id
+                + ", x: " + x + ", y: " + y
+                + ", w: " + width + ", h: " + height + "]";
+    }
+
 }
