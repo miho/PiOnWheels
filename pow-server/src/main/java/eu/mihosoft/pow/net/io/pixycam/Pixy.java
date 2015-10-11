@@ -33,6 +33,8 @@ public class Pixy {
             return;
         }
 
+        prepareExecutables();
+
         startPixy();
 
     }
@@ -77,21 +79,15 @@ public class Pixy {
 
     public void startPixy() {
 
-        String msg = "";
-
-        try {
-            URL inputUrl = getClass().
-                    getResource("/eu/mihosoft/pow/net/io/pixycam/pow-pixy");
-            File dest = new File("/tmp/pow-pixy");
-            FileUtils.copyURLToFile(inputUrl, dest);
-        } catch (Exception ex) {
-            // we don't care if file already exists
+        if (!isCamConnected()) {
+            System.err.println("ERROR: pixycam is not connected!");
+            return;
         }
 
         execute("sudo chmod +x /tmp/pow-pixy", true);
         executeThread("sudo /tmp/pow-pixy");
 
-        System.out.println("isRunning: " + isPixyRunning());
+        System.out.println("PixyCam: isRunning: " + isPixyRunning());
     }
 
     private void executeThread(String cmd) {
@@ -163,10 +159,47 @@ public class Pixy {
         t.start();
     }
 
+    private int executeWithResult(String cmd) {
+
+        try {
+
+            Runtime rt = Runtime.getRuntime();
+
+            Process pr = rt.exec(cmd);
+
+            pr.waitFor();
+
+            BufferedReader sout = new BufferedReader(
+                    new InputStreamReader(pr.getInputStream()));
+            BufferedReader err = new BufferedReader(
+                    new InputStreamReader(pr.getInputStream()));
+
+            String line = null;
+
+            while ((line = sout.readLine()) != null) {
+
+                System.out.println(">> " + line);
+            }
+
+            while ((line = err.readLine()) != null) {
+
+                System.out.println(">> " + line);
+            }
+
+            return pr.exitValue();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(Pixy.class.getName()).
+                    log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            java.util.logging.Logger.getLogger(Pixy.class.getName()).
+                    log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return 1;
+    }
+
     private void execute(String cmd, boolean waitFor) {
 
         try {
-            String msg = "";
 
             Runtime rt = Runtime.getRuntime();
 
@@ -184,13 +217,11 @@ public class Pixy {
             String line = null;
 
             while ((line = sout.readLine()) != null) {
-                msg += line + "\n";
 
                 System.out.println(">> " + line);
             }
 
             while ((line = err.readLine()) != null) {
-                msg += line + "\n";
 
                 System.out.println(">> " + line);
             }
@@ -211,7 +242,7 @@ public class Pixy {
 
             String msg = "";
 
-            Process pr = rt.exec("sh -c ps aux");
+            Process pr = rt.exec("sudo sh -c ps aux");
 
             pr.waitFor();
 
@@ -221,6 +252,7 @@ public class Pixy {
             String line = null;
 
             while ((line = input.readLine()) != null) {
+//                System.out.println("line: " + line);
                 msg += line + "\n";
             }
 
@@ -247,7 +279,37 @@ public class Pixy {
         return result;
     }
 
+    private void prepareExecutables() {
+        try {
+            URL inputUrl = getClass().
+                    getResource("/eu/mihosoft/pow/net/io/pixycam/pow-pixy-connected");
+            File dest = new File("/tmp/pow-pixy-connected");
+            FileUtils.copyURLToFile(inputUrl, dest);
+        } catch (Exception ex) {
+            // we don't care if file already exists
+        }
+        execute("sudo chmod +x /tmp/pow-pixy-connected", true);
+
+        try {
+            URL inputUrl = getClass().
+                    getResource("/eu/mihosoft/pow/net/io/pixycam/pow-pixy");
+            File dest = new File("/tmp/pow-pixy");
+            FileUtils.copyURLToFile(inputUrl, dest);
+        } catch (Exception ex) {
+            // we don't care if file already exists
+        }
+        execute("sudo chmod +x /tmp/pow-pixy", true);
+
+    }
+
     public boolean isCamConnected() {
-        throw new UnsupportedOperationException("Not supported yet."); // TODO NB-AUTOGEN
+
+        if (isPixyRunning()) {
+            return true;
+        }
+
+        int camResult = executeWithResult("sudo /tmp/pow-pixy-connected");
+
+        return camResult == 0;
     }
 }
